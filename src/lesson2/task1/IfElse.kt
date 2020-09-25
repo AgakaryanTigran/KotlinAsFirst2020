@@ -5,6 +5,7 @@ package lesson2.task1
 import lesson1.task1.discriminant
 import kotlin.math.max
 import kotlin.math.sqrt
+import kotlin.TODO as TODO
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -68,15 +69,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return when {
-        (age / 10) % 10 == 1 -> "$age лет"
-        age % 10 == 1 -> "$age год"
-        (age / 10) % 10 == 2 -> "$age года"
-        (age / 10) % 10 == 3 -> "$age года"
-        (age / 10) % 10 == 4 -> "$age года"
-        else -> "$age лет"
-    }
+fun ageDescription(age: Int): String = when {
+    (age / 10) % 10 == 1 -> "$age лет"
+    age % 10 == 1 -> "$age год"
+    (age / 10) % 10 == 2 -> "$age года"
+    (age / 10) % 10 == 3 -> "$age года"
+    (age / 10) % 10 == 4 -> "$age года"
+    else -> "$age лет"
 }
 
 /**
@@ -105,7 +104,12 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    return if ((kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2)) 3
+    else if (kingX == rookX1 || kingY == rookY1) 1
+    else if  (kingX == rookX2 || kingY == rookY2) 2
+    else 0
+}
 
 /**
  * Простая (2 балла)
@@ -132,8 +136,7 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
-
-        /**
+/**
  * Средняя (3 балла)
  *
  * Даны четыре точки на одной прямой: A, B, C и D.
@@ -150,3 +153,4 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+

@@ -3,6 +3,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.max
 
 /**
  * Пример
@@ -18,8 +19,10 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean = TODO()
-
+fun isNumberHappy(number: Int): Boolean {
+    if ((number % 10 + (number / 10) % 10) == (((number / 100) % 10) + ((number / 1000) % 10))) return true
+    else return false
+}
 /**
  * Простая (2 балла)
  *
@@ -27,8 +30,10 @@ fun isNumberHappy(number: Int): Boolean = TODO()
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
-
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
+    if ((x1 == x2) || (y1 == y2) || (Math.abs(x1 - x2) == Math.abs(y1 - y2))) return true
+    else return false
+}
 
 /**
  * Простая (2 балла)
@@ -59,4 +64,9 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    if ((((a <= s) && (b <= r)) || ((a <= s) && (b <= r)))
+        || (((a <= s) && (c <= r)) || ((a <= s) && (c <= r)))
+        || (((b <= s) && (c <= r)) || ((b <= s) && (c <= r)))) return true
+    else return false
+}
