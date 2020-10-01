@@ -3,7 +3,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
-import kotlin.math.max
+
 
 /**
  * Пример
@@ -20,8 +20,8 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    if ((number % 10 + (number / 10) % 10) == (((number / 100) % 10) + ((number / 1000) % 10))) return true
-    else return false
+    return if ((number % 10 + (number / 10) % 10) == (((number / 100) % 10) + ((number / 1000) % 10))) true
+    else false
 }
 /**
  * Простая (2 балла)
@@ -31,8 +31,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if ((x1 == x2) || (y1 == y2) || (Math.abs(x1 - x2) == Math.abs(y1 - y2))) return true
-    else return false
+    return if (x1 == x2 || y1 == y2 || kotlin.math.abs(x1 - x2) == kotlin.math.abs(y1 - y2)) true
+    else false
 }
 
 /**
@@ -65,8 +65,8 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    if ((((a <= s) && (b <= r)) || ((a <= s) && (b <= r)))
-        || (((a <= s) && (c <= r)) || ((a <= s) && (c <= r)))
-        || (((b <= s) && (c <= r)) || ((b <= s) && (c <= r)))) return true
-    else return false
+    return if ((a <= s && b <= r || a <= r && b <= s)
+        || (a <= s && c <= r || a <= r && c <= s)
+        || (b <= s && c <= r || b <= r && c <= s)) true
+    else false
 }

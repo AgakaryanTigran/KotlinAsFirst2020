@@ -5,7 +5,7 @@ package lesson2.task1
 import lesson1.task1.discriminant
 import kotlin.math.max
 import kotlin.math.sqrt
-import kotlin.TODO as TODO
+
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -105,11 +105,11 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return if ((kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2)) 3
-    else if (kingX == rookX1 || kingY == rookY1) 1
-    else if  (kingX == rookX2 || kingY == rookY2) 2
-    else 0
+): String = when {
+    ((kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2)) -> "3"
+    (kingX == rookX1 || kingY == rookY1) -> "1"
+    (kingX == rookX2 || kingY == rookY2) -> "2"
+    else -> "0"
 }
 
 /**
