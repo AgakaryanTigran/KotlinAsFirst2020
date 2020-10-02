@@ -4,7 +4,6 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 
-
 /**
  * Пример
  *
@@ -19,10 +18,9 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean {
-    return if ((number % 10 + (number / 10) % 10) == (((number / 100) % 10) + ((number / 1000) % 10))) true
-    else false
-}
+fun isNumberHappy(number: Int): Boolean =
+    (number % 10 + (number / 10) % 10) == (((number / 100) % 10) + ((number / 1000) % 10))
+
 /**
  * Простая (2 балла)
  *
@@ -30,10 +28,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    return if (x1 == x2 || y1 == y2 || kotlin.math.abs(x1 - x2) == kotlin.math.abs(y1 - y2)) true
-    else false
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    x1 == x2 || y1 == y2 || sqr(x1 - x2) == sqr(y1 - y2)
 
 /**
  * Простая (2 балла)
@@ -65,8 +61,7 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    return if ((a <= s && b <= r || a <= r && b <= s)
-        || (a <= s && c <= r || a <= r && c <= s)
-        || (b <= s && c <= r || b <= r && c <= s)) true
-    else false
+    return ((a <= s && b <= r || a <= r && b <= s)
+            || (a <= s && c <= r || a <= r && c <= s)
+            || (b <= s && c <= r || b <= r && c <= s))
 }
