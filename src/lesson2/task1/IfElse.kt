@@ -74,6 +74,7 @@ fun ageDescription(age: Int): String = when {
     age % 10 == 1 -> "$age год"
     (age / 10) % 10 == 9 -> "$age лет"
     (age / 10) in (1..9) -> "$age лет"
+    age % 10 in (5..9) ->"$age лет"
     else -> "$age года"
 }
 
