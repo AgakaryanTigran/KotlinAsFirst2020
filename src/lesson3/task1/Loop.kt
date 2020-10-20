@@ -2,7 +2,6 @@
 
 package lesson3.task1
 
-import kotlin.math.min
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -76,14 +75,11 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var num = n
     var count = 0
-    return if (num == 0) 1
-    else {
-        while (num != 0) {
-            num /= 10
-            count += 1
-        }
-        count
-    }
+    do {
+        num /= 10
+        count += 1
+    } while (num != 0)
+    return count
 }
 
 /**
@@ -101,18 +97,19 @@ fun fib(n: Int): Int {
         a = b
         b = c
     }
-    return (c)
+    return c
 }
+
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n) {
-        if (n % i == 0)
+    for (i in 2..sqrt(n.toDouble()).toInt())
+        if (n % i == 0) {
             return i
-    }
+        }
     return n
 }
 
@@ -148,13 +145,15 @@ fun collatzSteps(x: Int): Int = TODO()
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var f = 1
-    val k = min(m, n)
-    for (i in 2..k) {
-        if ((n % i == 0) && (m % i == 0)) f = i
+    var f = m
+    var k = n
+    while (f != 0 && k != 0) {
+        if (f > k) f %= k
+        else k %= f
     }
-    return (m * n) / f
+    return m * n / (f + k)
 }
+
 
 /**
  * Средняя (3 балла)
@@ -163,15 +162,9 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    val k = min(m, n)
-    var f = 1
-    for (i in 1..k) {
-        if ((n % i == 0) && (m % i == 0)) f = i
-    }
-    return if (f == 1) true
-    else false
-}
+fun isCoPrime(m: Int, n: Int): Boolean =
+    lcm(m, n) == m * n
+
 
 /**
  * Средняя (3 балла)
