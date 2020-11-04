@@ -177,7 +177,20 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    var num = n
+    val list = mutableListOf<Int>()
+    var i = 1
+    while (num > 1) {
+        i += 1
+        while (num % i == 0) {
+            list.add(i)
+            num /= i
+            if (num == 1) break
+        }
+    }
+    return list
+}
 
 /**
  * Сложная (4 балла)
@@ -186,7 +199,8 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String =
+    factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя (3 балла)
@@ -195,7 +209,16 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var num = n
+    val list = mutableListOf<Int>()
+    while (num > 0) {
+        val digit = num % base
+        list.add(digit)
+        num /= base
+    }
+    return list.reversed()
+}
 
 /**
  * Сложная (4 балла)
@@ -250,4 +273,115 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var num = n
+    val russian = mutableListOf<String>()
+    if (num % 100 in 10..19) {
+        when (num % 100) {
+            10 -> russian.add(0, "десять")
+            11 -> russian.add(0, "одиннадцать")
+            12 -> russian.add(0, "двенадцать")
+            13 -> russian.add(0, "тринадцать")
+            14 -> russian.add(0, "четырнадцать")
+            15 -> russian.add(0, "пятнадцать")
+            16 -> russian.add(0, "шестнадцать")
+            17 -> russian.add(0, "семнадцать")
+            18 -> russian.add(0, "восемнадцать")
+            else -> russian.add(0, "девятнадцать")
+        }
+        num /= 100
+    } else {
+        when (num % 10) {
+            1 -> russian.add(0, "один")
+            2 -> russian.add(0, "два")
+            3 -> russian.add(0, "три")
+            4 -> russian.add(0, "четыре")
+            5 -> russian.add(0, "пять")
+            6 -> russian.add(0, "шесть")
+            7 -> russian.add(0, "семь")
+            8 -> russian.add(0, "восемь")
+            9 -> russian.add(0, "девять")
+        }
+        if (num == 0) return "ноль"
+        num /= 10
+        when (num % 10) {
+            2 -> russian.add(0, "двадцать")
+            3 -> russian.add(0, "тридцать")
+            4 -> russian.add(0, "сорок")
+            5 -> russian.add(0, "пятьдесят")
+            6 -> russian.add(0, "шестьдесят")
+            7 -> russian.add(0, "семьдесят")
+            8 -> russian.add(0, "восемьдесят")
+            9 -> russian.add(0, "девяносто")
+        }
+        num /= 10
+    }
+    when (num % 10) {
+        1 -> russian.add(0, "сто")
+        2 -> russian.add(0, "двести")
+        3 -> russian.add(0, "триста")
+        4 -> russian.add(0, "четыреста")
+        5 -> russian.add(0, "пятьсот")
+        6 -> russian.add(0, "шестьсот")
+        7 -> russian.add(0, "семьсот")
+        8 -> russian.add(0, "восемьсот")
+        9 -> russian.add(0, "девятьсот")
+    }
+    num /= 10
+    if (num == 0) return russian.joinToString(separator = " ")
+    if (num % 100 in 10..19) {
+        when (num % 100) {
+            10 -> russian.add(0, "десять тысяч")
+            11 -> russian.add(0, "одиннадцать тысяч")
+            12 -> russian.add(0, "двенадцать тысяч")
+            13 -> russian.add(0, "тринадцать тысяч")
+            14 -> russian.add(0, "четырнадцать тысяч")
+            15 -> russian.add(0, "пятнадцать тысяч")
+            16 -> russian.add(0, "шестнадцать тысяч")
+            17 -> russian.add(0, "семнадцать тысяч")
+            18 -> russian.add(0, "восемнадцать тысяч")
+            else -> russian.add(0, "девятнадцать тысяч")
+        }
+        num /= 100
+        if (num == 0) return russian.joinToString(separator = " ")
+    } else {
+        when (num % 10) {
+            0 -> russian.add(0, "тысяч")
+            1 -> russian.add(0, "одна тысяча")
+            2 -> russian.add(0, "две тысячи")
+            3 -> russian.add(0, "три тысячи")
+            4 -> russian.add(0, "четыре тысячи")
+            5 -> russian.add(0, "пять тысяч")
+            6 -> russian.add(0, "шесть тысяч")
+            7 -> russian.add(0, "семь тысяч")
+            8 -> russian.add(0, "восемь тысяч")
+            else -> russian.add(0, "девять тысяч")
+        }
+        num /= 10
+        if (num == 0) return russian.joinToString(separator = " ")
+        when (num % 10) {
+            2 -> russian.add(0, "двадцать")
+            3 -> russian.add(0, "тридцать")
+            4 -> russian.add(0, "сорок")
+            5 -> russian.add(0, "пятьдесят")
+            6 -> russian.add(0, "шестьдесят")
+            7 -> russian.add(0, "семьдесят")
+            8 -> russian.add(0, "восемьдесят")
+            9 -> russian.add(0, "девяносто")
+        }
+        num /= 10
+    }
+    if (num == 0) return russian.joinToString(separator = " ")
+    when (num % 10) {
+        1 -> russian.add(0, "сто")
+        2 -> russian.add(0, "двести")
+        3 -> russian.add(0, "триста")
+        4 -> russian.add(0, "четыреста")
+        5 -> russian.add(0, "пятьсот")
+        6 -> russian.add(0, "шестьсот")
+        7 -> russian.add(0, "семьсот")
+        8 -> russian.add(0, "восемьсот")
+        else -> russian.add(0, "девятьсот")
+    }
+    return russian.joinToString(separator = " ")
+}
