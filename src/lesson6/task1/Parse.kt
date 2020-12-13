@@ -159,10 +159,10 @@ fun firstDuplicateIndex(str: String): Int =
         val a = str.split(" ")
         var k = 0
         for (i in 0 until a.size) {
-            if (a[i].toLowerCase() == a[i + 1].toLowerCase()) break
+            if (a[i].equals(a[i + 1], ignoreCase = true)) break
             k += a[i].length + 1
         }
-        j
+        k
     } catch (e: IndexOutOfBoundsException) {
         -1
     }

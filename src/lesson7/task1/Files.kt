@@ -76,9 +76,9 @@ fun deleteMarked(inputName: String, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val result = mutableMapOf<String, Int>()
+    val res = mutableMapOf<String, Int>()
     val substrings = substrings.toSet()
-    for (el in substrings) result[el] = 0
+    for (el in substrings) res[el] = 0
 
     File(inputName).bufferedReader().use {
         it.forEachLine { line ->
@@ -86,12 +86,12 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
                 var count = line.toLowerCase().indexOf(el.toLowerCase())
                 while (count != -1) {
                     count = line.toLowerCase().indexOf(el.toLowerCase(), count + 1)
-                    result[el] = res[el]!! + 1
+                    res[el] = res[el]!! + 1
                 }
             }
         }
     }
-    return result
+    return res
 }
 
 /**
@@ -348,6 +348,7 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     TODO()
 }
