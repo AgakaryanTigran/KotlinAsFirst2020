@@ -186,7 +186,6 @@ fun factorize(n: Int): List<Int> {
         while (num % i == 0) {
             list.add(i)
             num /= i
-            if (num == 1) break
         }
     }
     return list

@@ -127,7 +127,12 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+
+fun bestHighJump(jumps: String): Int {
+    val list = "\\d+\\s+\\+".toRegex().findAll(jumps)
+    return if (list.toList().isEmpty()) -1 else
+        list.maxOf { it.value.filter { it.isDigit() }.toInt() }
+}
 
 /**
  * Сложная (6 баллов)
@@ -149,7 +154,18 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int =
+    try {
+        val a = str.split(" ")
+        var k = 0
+        for (i in 0 until a.size) {
+            if (a[i].toLowerCase() == a[i + 1].toLowerCase()) break
+            k += a[i].length + 1
+        }
+        j
+    } catch (e: IndexOutOfBoundsException) {
+        -1
+    }
 
 /**
  * Сложная (6 баллов)

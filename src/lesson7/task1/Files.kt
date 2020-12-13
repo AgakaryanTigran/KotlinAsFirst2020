@@ -75,8 +75,24 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    val substrings = substrings.toSet()
+    for (el in substrings) result[el] = 0
 
+    File(inputName).bufferedReader().use {
+        it.forEachLine { line ->
+            for (el in substrings) {
+                var count = line.toLowerCase().indexOf(el.toLowerCase())
+                while (count != -1) {
+                    count = line.toLowerCase().indexOf(el.toLowerCase(), count + 1)
+                    result[el] = res[el]!! + 1
+                }
+            }
+        }
+    }
+    return result
+}
 
 /**
  * Средняя (12 баллов)
@@ -144,8 +160,59 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    var max = 0
+    val count = mutableMapOf<String, Int>()
+    for (line in File(inputName).readLines()) {
+        var line1 = line
+        if (line1.isNotEmpty()) while (line1[0] == ' ' || line1.last() == ' ') line1 = line1.trim()
+        count[line] = line1.split(" ").filter { it != "" }.size
+        if (line1.length > max)
+            max = line1.length
+    }
+    for (line in File(inputName).readLines()) {
+        var number = 0
+        var num = 0
+        var line1 = line.split(" ").filter { it != "" }.joinToString(separator = " ")
+        if (line1.isNotEmpty()) while (line1[0] == ' ' || line1.last() == ' ') line1 = line1.trim()
+        when {
+            line.isEmpty() -> writer.newLine()
+            count[line] == 1 -> {
+                writer.write(line1)
+                writer.newLine()
+            }
+            max - line1.length > 0 -> {
+                num = (max - line1.length + count[line]!! - 1) / (count[line]!! - 1)
+                if ((max - line1.length) % (count[line]!! - 1) != 0)
+                    number = (max - line1.length) % (count[line]!! - 1)
+                else if ((max - line1.length) / (count[line]!! - 1) < 1)
+                    number = (max - line1.length + count[line]!!)
+                for (word in line1.split(" ")) {
+                    count[line] = count[line]!! - 1
+                    writer.write(word)
+                    if (count[line] != 0)
+                        for (p in 1..num) writer.write(" ")
+                    if (number > 0) {
+                        writer.write(" ")
+                        number -= 1
+                    }
+                }
+                writer.newLine()
+            }
+            max == line1.length -> {
+                for (word in line1.split(" ")) {
+                    count[line] = count[line]!! - 1
+                    writer.write(word)
+                    if (count[line] != 0)
+                        writer.write(" ")
+                }
+                writer.newLine()
+            }
+        }
+    }
+    writer.close()
 }
+
 
 /**
  * Средняя (14 баллов)
