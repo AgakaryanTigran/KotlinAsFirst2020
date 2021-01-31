@@ -102,7 +102,12 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val result = phone.replace(" ", "").replace("-", "")
+    return if (result.matches(Regex("""^\+?\d*\(?\d+\)?\d*""")))
+        result.replace("(", "").replace(")", "")
+    else ""
+}
 
 /**
  * Средняя (5 баллов)
@@ -128,11 +133,7 @@ fun bestLongJump(jumps: String): Int = TODO()
  * вернуть -1.
  */
 
-fun bestHighJump(jumps: String): Int {
-    val list = "\\d+\\s+\\+".toRegex().findAll(jumps)
-    return if (list.toList().isEmpty()) -1 else
-        list.maxOf { it.value.filter { it.isDigit() }.toInt() }
-}
+fun bestHighJump(jumps: String): Int = TODO()
 
 /**
  * Сложная (6 баллов)

@@ -96,15 +96,8 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val result = mutableMapOf<Int, MutableList<String>>()
-    for ((name, grade) in grades) {
-        val k = result[grade]
-        if (k == null) result[grade] = mutableListOf(name)
-        else k.add(name)
-    }
-    return result
-}
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+
 
 /**
  * Простая (2 балла)
@@ -191,7 +184,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String = TODO()
 
 /**
  * Средняя (3 балла)
@@ -202,7 +195,11 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val lowerCases = chars.map { it.toLowerCase() }.toSet()
+    val res = word.toLowerCase().toSet()
+    return (lowerCases.union(res) == lowerCases)
+}
 
 /**
  * Средняя (4 балла)
@@ -216,15 +213,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> {
-    val result = mutableMapOf<String, Int>()
-    for (name in list) {
-        if (name in result)
-            result[name] = result[name]!! + 1
-        else result[name] = 1
-    }
-    return result.filterValues { it > 1 }
-}
+fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
 
 /**
  * Средняя (3 балла)
@@ -238,7 +227,17 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    val result = mutableSetOf<Set<Char>>()
+    if (words.isEmpty()) {
+        return false
+    } else {
+        for (element in words)
+            result.add(element.toSet())
+        if (result.count() != words.count()) return true
+    }
+    return false
+}
 
 /**
  * Сложная (5 баллов)

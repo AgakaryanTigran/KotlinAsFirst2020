@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -17,7 +18,7 @@ import kotlin.math.sqrt
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
-        result = result * i // Please do not fix in master
+        result *= i // Please do not fix in master
     }
     return result
 }
@@ -236,7 +237,22 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var z = 0
+    var num = 0
+    var square: Int
+    while (z < n) {
+        for (i in 1..n) {
+            square = i * i
+            z += digitNumber(square)
+            if (z - n >= 0) {
+                num = (square / 10.0.pow(z - n).toInt()) % 10
+                break
+            }
+        }
+    }
+    return num
+}
 
 /**
  * Сложная (5 баллов)
