@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import kotlin.math.max
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -326,4 +327,44 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val weight = mutableListOf<Int>()
+    val cost = mutableListOf<Int>()
+    val result = mutableSetOf<String>()
+
+    val array = Array(treasures.size + 1) { IntArray(capacity + 1) }
+    for (i in 0..treasures.size)
+        array[i][0] = 0
+
+    for (i in 0..capacity)
+        array[0][i] = 0
+
+    val answerHelper = mutableListOf<String>()
+    for ((key) in treasures)
+        answerHelper.add(key)
+
+    for ((key, values) in treasures) {
+        weight.add(values.first)
+        cost.add(values.second)
+    }
+
+    for (i in 1..treasures.size) {
+        for (j in 1..capacity) {
+            if (j >= weight[i - 1]) array[i][j] =
+                max(array[i - 1][j], array[i - 1][j - weight[i - 1]] + cost[i - 1])
+            else array[i][j] = array[i - 1][j]
+        }
+    }
+
+    fun answerHelper(i: Int, j: Int): Int {
+        if (array[i][j] == 0) return 0
+        if (array[i - 1][j] == array[i][j]) answerHelper(i - 1, j)
+        else {
+            answerHelper(i - 1, j - weight[i - 1])
+            result.add(answerHelper[i - 1])
+        }
+        return i
+    }
+    answerHelper(answerHelper.size, capacity)
+    return result
+}

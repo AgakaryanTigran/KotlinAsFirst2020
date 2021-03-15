@@ -15,6 +15,12 @@ import kotlin.math.sqrt
  * Точка на плоскости
  */
 data class Point(val x: Double, val y: Double) {
+
+    /**
+     * Возвращает квадрат расстояния между данной и other точками
+     */
+    fun squareDistance(other: Point) = sqr(x - other.x) + sqr(y - other.y)
+
     /**
      * Пример
      *
@@ -89,8 +95,17 @@ data class Circle(val center: Point, val radius: Double) {
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = sqrt(sqr(center.x - p.x) + sqr(center.y - p.y)) <= radius
+    fun containsAll(points: Collection<Point>): Boolean {
+        for (p in points) {
+            if (!this.contains(p)) {
+                return false
+            }
+        }
+        return true
+    }
 }
+
 
 /**
  * Отрезок между двумя точками
@@ -195,7 +210,19 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+    val circle = Point(0.0, 0.0)
+
+    val x = a.x * (b.y - c.y) - a.y * (b.x - c.x) + b.x * c.y - c.x * b.y
+    val y = a.squareDistance(circle) * (c.y - b.y) + b.squareDistance(circle) * (a.y - c.y) +
+            c.squareDistance(circle) * (b.y - a.y)
+    val z = a.squareDistance(circle) * (b.x - c.x) + b.squareDistance(circle) * (c.x - a.x) +
+            c.squareDistance(circle) * (a.x - b.x)
+
+    val center = Point(-y / (2 * x), -z / (2 * x))
+
+    return Circle(center, center.distance(a))
+}
 
 /**
  * Очень сложная (10 баллов)
@@ -208,5 +235,35 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
  * три точки данного множества, либо иметь своим диаметром отрезок,
  * соединяющий две самые удалённые точки в данном множестве.
  */
-fun minContainingCircle(vararg points: Point): Circle = TODO()
+fun minContainingCircle(vararg points: Point): Circle {
+    if (points.isEmpty()) throw IllegalArgumentException("Parameter's list hasn't to be empty")
+
+    val result = points.toSet().toMutableSet()
+    val point = result.toList()
+
+    if (point.size == 1)
+        return Circle(point[0], 0.0)
+
+    val diameter = diameter(*point.toTypedArray())
+    var circle = circleByDiameter(diameter)
+    // Remove reference points of circle to avoid accuracy loss
+    if (circle.containsAll(result - setOf(diameter.begin, diameter.end)))
+        return circle
+
+    var minCircle = Circle(Point(0.0, 0.0), Double.POSITIVE_INFINITY)
+
+    for (i in point.indices) {
+        for (j in i + 1..point.lastIndex) {
+            for (k in j + 1..point.lastIndex) {
+                circle = circleByThreePoints(point[i], point[j], point[k])
+                // Remove reference points of circle to avoid accuracy loss
+                if (circle.containsAll(result - setOf(point[i], point[j], point[k])) && circle.radius < minCircle.radius) {
+                    minCircle = circle
+                }
+            }
+        }
+    }
+
+    return minCircle
+}
 

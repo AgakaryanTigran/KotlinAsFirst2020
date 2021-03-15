@@ -3,6 +3,8 @@
 package lesson7.task1
 
 import java.io.File
+import lesson3.task1.digitNumber
+import java.lang.Integer.max
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -302,8 +304,61 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  */
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    var i = false
+    var b = false
+    var s = false
+    var p = true
+    val rb = Regex("\\*\\*")
+    val ri = Regex("\\*")
+    val rs = Regex("""~~""")
+    writer.write("<html><body><p>")
+    val lines = File(inputName).readLines()
+    for (m in lines.indices) {
+        if (lines[m].isEmpty()) {
+            if (m != lines.size - 1 && !p) {
+                writer.write("</p><p>")
+                writer.newLine()
+                p = true
+            }
+            continue
+        }
+        p = false
+        var l = lines[m]
+        while (l.contains(rb)) {
+            if (b) {
+                b = false
+                l = rb.replaceFirst(l, "</b>")
+            } else {
+                b = true
+                l = rb.replaceFirst(l, "<b>")
+            }
+        }
+        while (l.contains(ri)) {
+            if (i) {
+                i = false
+                l = ri.replaceFirst(l, "</i>")
+            } else {
+                i = true
+                l = ri.replaceFirst(l, "<i>")
+            }
+        }
+        while (l.contains(rs)) {
+            if (s) {
+                s = false
+                l = rs.replaceFirst(l, "</s>")
+            } else {
+                s = true
+                l = rs.replaceFirst(l, "<s>")
+            }
+        }
+        writer.write(l)
+        writer.newLine()
+    }
+    writer.write("</p></body></html>")
+    writer.close()
 }
+
 
 /**
  * Сложная (23 балла)
@@ -415,8 +470,80 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
  *
  */
 fun markdownToHtml(inputName: String, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        val nestingTags = ArrayDeque<String>()
+        it.write("<html><body><p>")
+        nestingTags.add("</p>")
+        var indentPrev = -1
+        var prevEmpty = false
+        for (line in File(inputName).readLines()) {
+            val x = Regex("""\s{4}""").findAll(line).count()
+            val y = !(line.contains(Regex("""^(\s{4})*\*\s""")) || line.contains(Regex("""^(\s{4})*\d+\.\s""")))
+            var z = line.removeRange(0, x * 4 + Regex("""\d""").findAll(line).count() + if (y) 0 else 2)
+
+            if (prevEmpty) {
+                it.write("<p>")
+                nestingTags.add("</p>")
+            }
+            if (line.isEmpty()) {
+                while (nestingTags.last() != "</p>") it.write(nestingTags.removeLast())
+                it.write("</p>")
+                nestingTags.removeLast()
+                prevEmpty = true
+                continue
+            } else prevEmpty = false
+            //println(lineChange)
+            var i = 0
+            while (z.contains("~~")) {
+                z = z.replaceFirst("~~", "<s>")
+                z = z.replaceFirst("~~", "</s>")
+            }
+            while (i < z.length) {
+                if (i < z.length - 1 && z[i] == '*' && z[i + 1] == '*' && !nestingTags.contains("</b>")) {
+                    z = z.replaceFirst("**", "<b>")
+                    nestingTags.add("</b>")
+                    i++
+                } else if (i < z.length - 1 && z[i] == '*' && z[i + 1] == '*' && nestingTags.last() == ("</b>")) {
+                    z = z.replaceFirst("**", nestingTags.removeLast())
+                    i++
+                } else if (z[i] == '*' && !nestingTags.contains("</i>")) {
+                    z = z.replaceFirst("*", "<i>")
+                    nestingTags.add("</i>")
+                } else if (z[i] == '*' && nestingTags.last() == ("</i>")) z = z.replaceFirst("*", nestingTags.removeLast())
+                i++
+            }
+            //println(nestingTags)
+            if (y) {
+                it.write(z)
+                continue
+            }
+            if (indentPrev < x) {
+                if (line.contains(Regex("""^(\s{4})*\*\s"""))) {
+                    it.write("<ul><li>$z")
+                    nestingTags.add("</ul>")
+                    nestingTags.add("</li>")
+                } else if (line.contains(Regex("""^(\s{4})*\d+\.\s"""))) {
+                    it.write("<ol><li>$z")
+                    nestingTags.add("</ol>")
+                    nestingTags.add("</li>")
+                }
+            } else if (indentPrev > x) {
+                it.write("</li>")
+                nestingTags.removeLast()
+                it.write(nestingTags.removeLast())
+                it.write("</li><li>$z")
+            } else if (indentPrev == x) it.write("</li><li>$z")
+            indentPrev = x
+        }
+
+        while (nestingTags.last() != "</p>") it.write(nestingTags.removeLast())
+        it.write("</p>")
+        nestingTags.removeLast()
+        //println(nestingTags)
+        it.write("</body></html>")
+    }
 }
+
 
 /**
  * Средняя (12 баллов)
@@ -469,6 +596,59 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+
+    fun writeSubtrahend(lines: MutableList<StringBuilder>, idx: Int, indent: Int, subtrahend: Int) {
+        lines[idx].append("${" ".repeat(indent - digitNumber(subtrahend) - 1)}-${subtrahend}")
+    }
+
+    fun writeSeparator(lines: MutableList<StringBuilder>, idx: Int, indent: Int, minuend: Int, subtrahend: Int) {
+        val totalLen = max(digitNumber(minuend), digitNumber(subtrahend) + 1)
+        lines[idx].append("${" ".repeat(indent - totalLen)}${"-".repeat(totalLen)}")
+    }
+
+    fun writeDifference(lines: MutableList<StringBuilder>, idx: Int, indent: Int, difference: Int) {
+        lines[idx].append("%${indent}s".format(difference))
+    }
+
+    val d = MutableList(3 * digitNumber(lhv / rhv) + 1) { StringBuilder() }
+    d[0].append("$lhv")
+
+    var m = 0
+    var y = 0
+    while (y < d[0].length && m < rhv) {
+        m = m * 10 + (d[0][y++] - '0')
+    }
+
+    var res = 1
+    do {
+        val s = m / rhv * rhv
+
+        if (y - digitNumber(s) < 1) {
+            d[0].insert(0, " ")
+            y++
+        }
+
+        writeSubtrahend(d, res++, y, s)
+        writeSeparator(d, res++, y, m, s)
+        writeDifference(d, res, y, m - s)
+
+        m -= s
+        if (y < d[0].length) {
+            d[res++].append(d[0][y])
+            m = m * 10 + (d[0][y] - '0')
+        }
+        y++
+    } while (y <= d[0].length)
+
+    d[1].append("${" ".repeat(d[0].length + 3 - d[1].length)}${lhv / rhv}")
+    d[0].append(" | $rhv")
+
+    val w = File(outputName).bufferedWriter()
+
+    for (line in d) {
+        w.write(line.toString())
+        w.newLine()
+    }
+    w.close()
 }
 
